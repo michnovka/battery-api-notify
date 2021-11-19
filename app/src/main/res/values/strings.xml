@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Battery Api Notify</string>
+
+    <string name="hint_api_url">API Url</string>
+    <string name="hint_api_secret">API Secret</string>
+    <string name="text_https">https://</string>
+    <string name="app_status">App Status</string>
+    <string name="save">Save</string>
+</resources>

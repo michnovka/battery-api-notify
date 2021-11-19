@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/drawable/ic_green.xml" value="0.34322916666666664" />
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/drawable/ic_red.xml" value="0.34322916666666664" />
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/drawable/ic_toggle_bg.xml" value="0.34322916666666664" />
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/drawable/toggle_thumb.xml" value="0.34322916666666664" />
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/drawable/toggle_track.xml" value="0.34322916666666664" />
+        <entry key="../../Desktop/BatteryMonitor/app/src/main/res/layout/activity_main.xml" value="0.31302083333333336" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
