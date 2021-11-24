@@ -21,8 +21,7 @@
             android:id="@+id/text_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:prefixText="@string/text_https">
+            android:layout_marginBottom="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -126,6 +125,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </LinearLayout>
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#99C3BFBF"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_on_reboot" />
+
+        <Switch
+            android:id="@+id/switch_boot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:checked="false"
+            android:thumb="@drawable/toggle_thumb"
+            android:track="@drawable/toggle_track"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
 
         <Button
             android:id="@+id/btn_save"

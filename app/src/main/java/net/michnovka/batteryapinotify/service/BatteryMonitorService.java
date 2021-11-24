@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -40,13 +41,21 @@ import java.util.Map;
  * Created by kishon on 18,November,2021
  */
 public class BatteryMonitorService extends Service {
-    private static final String TAG = "BatteryMonitorService";
 
+    private static final String TAG = "BatteryMonitorService";
     public static boolean isRunning = false;
-    private final Handler handler = new Handler();
-    private int delay;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private Configuration configuration;
+
+    private int delay;
+    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            getBatteryInformation();
+            handler.postDelayed(this, delay);
+        }
+    };
 
     @Nullable
     @Override
@@ -58,8 +67,7 @@ public class BatteryMonitorService extends Service {
     public void onCreate() {
         super.onCreate();
         sharedPreferenceHelper = new SharedPreferenceHelper(getApplicationContext());
-        delay = sharedPreferenceHelper.getConfiguration().getInterval() * 100;
-        configuration = sharedPreferenceHelper.getConfiguration();
+
     }
 
 
@@ -76,13 +84,10 @@ public class BatteryMonitorService extends Service {
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .build();
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                getBatteryInformation();
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
+        delay = sharedPreferenceHelper.getConfiguration().getInterval() * 1000;
+        configuration = sharedPreferenceHelper.getConfiguration();
 
+        handler.postDelayed(runnable, delay);
         startForeground(1, notification);
 
         return START_NOT_STICKY;
@@ -92,6 +97,7 @@ public class BatteryMonitorService extends Service {
     @Override
     public void onDestroy() {
         isRunning = false;
+        handler.removeCallbacks(runnable);
         super.onDestroy();
     }
 
@@ -172,6 +178,7 @@ public class BatteryMonitorService extends Service {
                     params.put("battery_level_limit", configuration.getAbove().getLevelString());
                     params.put("current_battery_level", String.valueOf(batteryInformation.getLevel()));
                     params.put("battery_limit_type", "upper");
+                    Log.d(TAG, "getBatteryInformation: " + params.toString());
                     sendToServer(params);
                 }
             }
@@ -181,7 +188,7 @@ public class BatteryMonitorService extends Service {
                     params.put("battery_level_limit", configuration.getBelow().getLevelString());
                     params.put("current_battery_level", String.valueOf(batteryInformation.getLevel()));
                     params.put("battery_limit_type", "lower");
-
+                    Log.d(TAG, "getBatteryInformation: " + params.toString());
                     sendToServer(params);
                 }
             }
@@ -191,8 +198,10 @@ public class BatteryMonitorService extends Service {
         }
     }
 
-    private void sendToServer(HashMap<String, String> params) {
-        StringRequest request = new StringRequest(Request.Method.POST, "https://" + sharedPreferenceHelper.getConfiguration().getUrl(), new Response.Listener<String>() {
+    private void sendToServer(@NonNull HashMap<String, String> params) {
+        Log.d(TAG, "sendToServer: " + params.toString());
+
+        StringRequest request = new StringRequest(Request.Method.POST, sharedPreferenceHelper.getConfiguration().getUrl(), new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onResponse(String response) {

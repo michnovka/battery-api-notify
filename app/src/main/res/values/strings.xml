@@ -6,4 +6,5 @@
     <string name="text_https">https://</string>
     <string name="app_status">App Status</string>
     <string name="save">Save</string>
+    <string name="start_on_reboot">Start On Reboot</string>
 </resources>

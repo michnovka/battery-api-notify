@@ -3,7 +3,8 @@
     package="net.michnovka.batteryapinotify">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".App"
@@ -12,8 +13,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.BatteryMonitor">
+        android:theme="@style/Theme.BatteryMonitor"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
@@ -29,6 +30,15 @@
             android:enabled="true"
             android:exported="true" />
 
+        <receiver
+            android:name=".service.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

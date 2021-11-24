@@ -14,18 +14,18 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.textfield.TextInputLayout;
 
 import net.michnovka.batteryapinotify.R;
+import net.michnovka.batteryapinotify.model.configuration.Above;
 import net.michnovka.batteryapinotify.model.configuration.Below;
 import net.michnovka.batteryapinotify.model.configuration.Configuration;
 import net.michnovka.batteryapinotify.service.BatteryMonitorService;
 import net.michnovka.batteryapinotify.util.SharedPreferenceHelper;
-import net.michnovka.batteryapinotify.model.configuration.Above;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextInputLayout mApiURL, mLevelAbove, mLevelBelow, mInterval;
     private CheckBox mLevelAboveCheckBox, mLevelBelowCheckBox;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch mAppStatus;
+    private Switch mAppStatus, mStartOnReboot;
     private SharedPreferenceHelper sharedPreference;
 
     @Override
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mLevelAboveCheckBox = findViewById(R.id.checkBox_Above);
         mLevelBelowCheckBox = findViewById(R.id.checkBox_Below);
         mAppStatus = findViewById(R.id.switch_status);
+        mStartOnReboot = findViewById(R.id.switch_boot);
     }
 
     private void initFields() {
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             mLevelAboveCheckBox.setChecked(configuration.getAbove().getEnabled());
             mLevelBelowCheckBox.setChecked(configuration.getBelow().getEnabled());
             mAppStatus.setChecked(sharedPreference.getStatus());
+            mStartOnReboot.setChecked(sharedPreference.getBoot());
         }
     }
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isAboveLevelEnabled = mLevelAboveCheckBox.isChecked();
         boolean isBelowLevelEnabled = mLevelBelowCheckBox.isChecked();
         boolean status = mAppStatus.isChecked();
+        boolean boot = mStartOnReboot.isChecked();
 
         if (TextUtils.isEmpty(url)) {
             mApiURL.setErrorEnabled(true);
@@ -116,11 +119,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (sharedPreference.saveConfiguration(configuration)) {
             if (sharedPreference.setStatus(status)) {
-                Intent intent = new Intent(MainActivity.this, BatteryMonitorService.class);
-                if (status) {
-                    ContextCompat.startForegroundService(MainActivity.this, intent);
-                } else {
-                    stopService(intent);
+                if (sharedPreference.setBoot(boot)) {
+                    Intent intent = new Intent(MainActivity.this, BatteryMonitorService.class);
+                    if (status) {
+                        ContextCompat.startForegroundService(MainActivity.this, intent);
+                    } else {
+                        stopService(intent);
+                    }
                 }
             }
         }

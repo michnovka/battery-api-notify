@@ -13,6 +13,7 @@ public class SharedPreferenceHelper {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private static final String STATUS_KEY = "STATUS_KEY";
+    private static final String BOOT_KAY = "BOOT_KAY";
     private static final String CONFIGURATION_KEY = "CONFIGURATION_KEY";
 
     public SharedPreferenceHelper(Context context) {
@@ -40,5 +41,14 @@ public class SharedPreferenceHelper {
 
     public boolean getStatus(){
         return preferences.getBoolean(STATUS_KEY, false);
+    }
+
+    public boolean setBoot(boolean value){
+        editor.putBoolean(BOOT_KAY, value);
+        return editor.commit();
+    }
+
+    public boolean getBoot(){
+        return preferences.getBoolean(BOOT_KAY, false);
     }
 }
