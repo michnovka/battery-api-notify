@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             if (sharedPreference.setStatus(status)) {
                 if (sharedPreference.setBoot(boot)) {
                     Intent intent = new Intent(MainActivity.this, BatteryMonitorService.class);
+
                     if (status) {
                         ContextCompat.startForegroundService(MainActivity.this, intent);
                     } else {
