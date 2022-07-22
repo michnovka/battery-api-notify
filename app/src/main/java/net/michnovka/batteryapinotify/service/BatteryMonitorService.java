@@ -1,5 +1,6 @@
 package net.michnovka.batteryapinotify.service;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static net.michnovka.batteryapinotify.App.CHANNEL_ID;
 
 import android.app.AlarmManager;
@@ -45,10 +46,14 @@ public class BatteryMonitorService extends Service {
 
         isRunning = true;
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, new Intent(this, MainActivity.class), flags);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
+                new Intent(this, MainActivity.class), FLAG_IMMUTABLE);
+
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Service Running!")
-                .addAction(new NotificationCompat.Action(R.drawable.ic_launcher_foreground, "View", pendingIntent))
+                .addAction(new NotificationCompat.Action(R.drawable.ic_launcher_foreground,
+                        "View", pendingIntent))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .build();
@@ -65,22 +70,26 @@ public class BatteryMonitorService extends Service {
     @Override
     public void onDestroy() {
         isRunning = false;
-        stopService(); 
+        stopService();
         super.onDestroy();
     }
 
     private void startService(Configuration configuration) {
         Intent myAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-        PendingIntent recurringAlarm = PendingIntent.getBroadcast(getApplicationContext(), 0, myAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent recurringAlarm = PendingIntent.getBroadcast(getApplicationContext(),
+                0, myAlarm, FLAG_IMMUTABLE);
         AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarms.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,configuration.getInterval() * 1000, recurringAlarm);
+        alarms.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                configuration.getInterval() * 1000, recurringAlarm);
     }
 
     private void stopService() {
         Intent myAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-        PendingIntent recurringAlarm = PendingIntent.getBroadcast(getApplicationContext(), 0, myAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        PendingIntent recurringAlarm = PendingIntent.getBroadcast(getApplicationContext(),
+                0, myAlarm, FLAG_IMMUTABLE);
+        AlarmManager alarms = (AlarmManager) getApplicationContext()
+                .getSystemService(Context.ALARM_SERVICE);
         alarms.cancel(recurringAlarm);
     }
 }
